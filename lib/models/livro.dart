@@ -3,8 +3,8 @@ class Livro {
   final String titulo;
   final String autor;
   final String descricao;
-  final String imagemAsset; // Caminho da imagem local no assets/
-  String categoria; // 'Quero Ler', 'Lendo', 'Lido'
+  final String imagemAsset; // caminho exato, ex: "assets/imagens/1984.png"
+  String categoria;
 
   Livro({
     required this.id,

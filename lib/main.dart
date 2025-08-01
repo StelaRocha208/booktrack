@@ -16,8 +16,17 @@ class BookTrackApp extends StatefulWidget {
 
 class _BookTrackAppState extends State<BookTrackApp> {
   final List<Livro> estante = [];
-
   int paginaAtual = 0;
+
+  // Versões outlined e filled de cada ícone (apenas Catálogo e Home)
+  final _iconsOutlined = [
+    Icons.menu_book_outlined,
+    Icons.home_outlined,
+  ];
+  final _iconsFilled = [
+    Icons.menu_book,
+    Icons.home,
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -28,26 +37,43 @@ class _BookTrackAppState extends State<BookTrackApp> {
 
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: const Text('BookTrack')),
         body: telas[paginaAtual],
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: paginaAtual,
-          onTap: (index) {
-            setState(() {
-              paginaAtual = index;
-            });
-          },
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Catálogo',
+        bottomNavigationBar: _buildCustomBottomNav(),
+      ),
+    );
+  }
+
+  Widget _buildCustomBottomNav() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1), 
+            blurRadius: 8,
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: List.generate(_iconsOutlined.length, (i) {
+          final isActive = paginaAtual == i;
+          return GestureDetector(
+            onTap: () => setState(() => paginaAtual = i),
+            child: SizedBox(
+              width: 56,
+              height: 56,
+              child: Icon(
+                isActive ? _iconsFilled[i] : _iconsFilled[i],
+                size: 32,
+                color: isActive
+                    ? const Color(0xFFBF6E3F)  // cor ativa
+                    : const Color(0xFF260F01),    // cor inativa
+              ),
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.library_books),
-              label: 'Estante',
-            ),
-          ],
-        ),
+          );
+        }),
       ),
     );
   }
