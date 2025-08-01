@@ -4,9 +4,15 @@ import '../screens/detalhes_screen.dart';
 
 class LivroCard extends StatelessWidget {
   final Livro livro;
-  final VoidCallback onAdicionar;
+  final List<Livro> estante;
+  final Function(Livro, String) onAdicionarLivro;
 
-  const LivroCard({super.key, required this.livro, required this.onAdicionar});
+  const LivroCard({
+    super.key,
+    required this.livro,
+    required this.estante,
+    required this.onAdicionarLivro,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +24,8 @@ class LivroCard extends StatelessWidget {
             MaterialPageRoute(
               builder: (_) => DetalhesScreen(
                 livro: livro,
-                onSelecionarCategoria: (categoria) {
-                  livro.categoria = categoria;
-                  onAdicionar();
-                },
+                estante: estante,
+                onAdicionarLivro: onAdicionarLivro,
               ),
             ),
           );
@@ -31,10 +35,11 @@ class LivroCard extends StatelessWidget {
         subtitle: Text('${livro.autor}\n${livro.descricao}'),
         isThreeLine: true,
         trailing: ElevatedButton(
-          onPressed: onAdicionar,
+          onPressed: () => onAdicionarLivro(livro, 'Quero Ler'),
           child: const Text('Adicionar Livro'),
         ),
       ),
     );
   }
 }
+

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../data/catalogo_mock.dart';
 import '../models/livro.dart';
-import 'detalhes_screen.dart'; // Importe a tela de detalhes
+import 'detalhes_screen.dart';
 
 class CatalogoScreen extends StatefulWidget {
   final List<Livro> estante;
