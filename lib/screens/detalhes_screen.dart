@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/livro.dart';
+import 'resenha_screen.dart'; // lembre-se de importar a tela da resenha
 
-class DetalhesScreen extends StatelessWidget {
+class DetalhesScreen extends StatefulWidget {
   final Livro livro;
   final List<Livro> estante;
   final Function(Livro, String) onAdicionarLivro;
@@ -13,8 +14,13 @@ class DetalhesScreen extends StatelessWidget {
     required this.onAdicionarLivro,
   });
 
+  @override
+  State<DetalhesScreen> createState() => _DetalhesScreenState();
+}
+
+class _DetalhesScreenState extends State<DetalhesScreen> {
   bool _livroJaAdicionado() {
-    return estante.any((l) => l.id == livro.id);
+    return widget.estante.any((l) => l.id == widget.livro.id);
   }
 
   void _adicionarComCategoria(BuildContext context) {
@@ -51,7 +57,7 @@ class DetalhesScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(20),
                 ),
                 onPressed: () {
-                  onAdicionarLivro(livro, categoria);
+                  widget.onAdicionarLivro(widget.livro, categoria);
                   Navigator.pop(context);
                   Navigator.pop(context); // Volta para a tela anterior
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -140,7 +146,7 @@ class DetalhesScreen extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: Image.asset(
-                        livro.imagemAsset,
+                        widget.livro.imagemAsset,
                         width: 150,
                         height: 200,
                         fit: BoxFit.cover,
@@ -161,7 +167,7 @@ class DetalhesScreen extends StatelessWidget {
                     
                     // Título do livro
                     Text(
-                      livro.titulo,
+                      widget.livro.titulo,
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -174,7 +180,7 @@ class DetalhesScreen extends StatelessWidget {
                     
                     // Autor
                     Text(
-                      'por ${livro.autor}',
+                      'por ${widget.livro.autor}',
                       style: const TextStyle(
                         fontSize: 16,
                         color: Color(0xFF8B4513),
@@ -206,7 +212,7 @@ class DetalhesScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            livro.descricao,
+                            widget.livro.descricao,
                             style: const TextStyle(
                               fontSize: 14,
                               color: Color(0xFF666666),
@@ -217,10 +223,46 @@ class DetalhesScreen extends StatelessWidget {
                         ],
                       ),
                     ),
+
+                    // Exibir resenha se existir
+                    if (widget.livro.resenha != null && widget.livro.resenha!.isNotEmpty) ...[
+                      const SizedBox(height: 20),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFD9D9D9).withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Sua Resenha',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF333333),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              widget.livro.resenha!,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Color(0xFF666666),
+                                height: 1.5,
+                              ),
+                              textAlign: TextAlign.justify,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                     
                     const SizedBox(height: 30),
                     
-                    // Botão de ação
+                    // Botão de ação "Adicionar à Estante"
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
@@ -254,7 +296,34 @@ class DetalhesScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    
+
+                    // Espaço antes do botão "Adicionar/Editar Resenha"
+                    if (jaAdicionado) const SizedBox(height: 12),
+
+                    // Botão "Adicionar/Editar Resenha" só aparece se o livro já está na estante
+                    if (jaAdicionado)
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => ResenhaScreen(livro: widget.livro),
+                              ),
+                            ).then((_) {
+                              setState(() {}); // Atualiza após salvar/editar resenha
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFBF6E3F),
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.all(16),
+                          ),
+                          child: const Text('Adicionar/Editar Resenha'),
+                        ),
+                      ),
+
                     if (jaAdicionado) ...[
                       const SizedBox(height: 12),
                       Text(

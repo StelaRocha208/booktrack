@@ -3,8 +3,9 @@ class Livro {
   final String titulo;
   final String autor;
   final String descricao;
-  final String imagemAsset; // caminho exato, ex: "assets/imagens/1984.png"
+  final String imagemAsset;
   String categoria;
+  String? resenha;
 
   Livro({
     required this.id,
@@ -13,5 +14,6 @@ class Livro {
     required this.descricao,
     required this.imagemAsset,
     this.categoria = '',
+    this.resenha,
   });
 }
