@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/livro.dart';
 import 'detalhes_screen.dart'; // Importe a tela de detalhes
+import 'resenha_screen.dart'; // Import para abrir diretamente a tela de resenha
 
 class EstanteScreen extends StatefulWidget {
   final List<Livro> estante;
@@ -27,7 +28,9 @@ class _EstanteScreenState extends State<EstanteScreen> {
           },
         ),
       ),
-    );
+    ).then((_) {
+      setState(() {}); // atualiza caso algo tenha mudado nos detalhes
+    });
   }
 
   @override
@@ -61,7 +64,7 @@ class _EstanteScreenState extends State<EstanteScreen> {
               ),
             ),
             
-            // TabBar customizada - REMOVIDO BoxShadow
+            // TabBar customizada
             Container(
               decoration: const BoxDecoration(
                 color: Color(0xFFA65638),
@@ -125,7 +128,7 @@ class _EstanteScreenState extends State<EstanteScreen> {
                           itemBuilder: (_, index) {
                             final livro = livrosCategoria[index];
                             return GestureDetector(
-                              onTap: () => _navegarParaDetalhes(livro), // Clique no container inteiro
+                              onTap: () => _navegarParaDetalhes(livro),
                               child: Container(
                                 margin: const EdgeInsets.only(bottom: 16),
                                 padding: const EdgeInsets.all(16),
@@ -147,12 +150,12 @@ class _EstanteScreenState extends State<EstanteScreen> {
                                       borderRadius: BorderRadius.circular(8),
                                       child: Image.asset(
                                         livro.imagemAsset,
-                                        width: 80,
-                                        height: 100,
+                                        width: 96,  // Aumentado
+                                        height: 120, // Aumentado
                                         fit: BoxFit.cover,
                                         errorBuilder: (_, __, ___) => Container(
-                                          width: 80,
-                                          height: 100,
+                                          width: 96,
+                                          height: 120,
                                           color: Colors.grey.shade300,
                                           child: const Icon(
                                             Icons.book,
@@ -196,34 +199,43 @@ class _EstanteScreenState extends State<EstanteScreen> {
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                           const SizedBox(height: 12),
-                                          
-                                          // Badge da categoria
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 12,
-                                              vertical: 6,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: const Color(0xFFBF6E3F),
-                                              borderRadius: BorderRadius.circular(10),
-                                            ),
-                                            child: Text(
-                                              categoria,
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w600,
+
+                                          // Botão "Adicionar resenha" exibido apenas para livros marcados como "Lido"
+                                          if (livro.categoria == 'Lido') ...[
+                                            SizedBox(
+                                              width: 160,
+                                              child: ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (_) => ResenhaScreen(livro: livro),
+                                                    ),
+                                                  ).then((_) {
+                                                    setState(() {});
+                                                  });
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: const Color(0xFFBF6E3F),
+                                                  foregroundColor: Colors.white,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(20),
+                                                  ),
+                                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                                ),
+                                                child: const Text(
+                                                  'Adicionar resenha',
+                                                  style: TextStyle(fontSize: 14),
+                                                ),
                                               ),
                                             ),
-                                          ),
+                                          ],
                                         ],
                                       ),
                                     ),
                                     
                                     GestureDetector(
-                                      onTap: () {
-                                        // Previne que o clique no menu acione também o clique do container
-                                      },
+                                      onTap: () {},
                                       child: PopupMenuButton<String>(
                                         icon: const Icon(
                                           Icons.more_vert,
@@ -386,3 +398,5 @@ class _EstanteScreenState extends State<EstanteScreen> {
     );
   }
 }
+
+

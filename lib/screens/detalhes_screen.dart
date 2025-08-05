@@ -19,8 +19,22 @@ class DetalhesScreen extends StatefulWidget {
 }
 
 class _DetalhesScreenState extends State<DetalhesScreen> {
+  // retorna o livro que está na estante (ou null se não existir)
+  Livro? _livroNaEstante() {
+    try {
+      return widget.estante.firstWhere((l) => l.id == widget.livro.id);
+    } catch (_) {
+      return null;
+    }
+  }
+
   bool _livroJaAdicionado() {
-    return widget.estante.any((l) => l.id == widget.livro.id);
+    return _livroNaEstante() != null;
+  }
+
+  bool _livroEstaLido() {
+    final l = _livroNaEstante();
+    return l != null && l.categoria == 'Lido';
   }
 
   void _adicionarComCategoria(BuildContext context) {
@@ -79,6 +93,7 @@ class _DetalhesScreenState extends State<DetalhesScreen> {
   @override
   Widget build(BuildContext context) {
     final jaAdicionado = _livroJaAdicionado();
+    final estaLido = _livroEstaLido();
 
     return Scaffold(
       backgroundColor: const Color(0xFFF2F2F0),
@@ -224,42 +239,6 @@ class _DetalhesScreenState extends State<DetalhesScreen> {
                       ),
                     ),
 
-                    // Exibir resenha se existir
-                    if (widget.livro.resenha != null && widget.livro.resenha!.isNotEmpty) ...[
-                      const SizedBox(height: 20),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFD9D9D9).withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Sua Resenha',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF333333),
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              widget.livro.resenha!,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Color(0xFF666666),
-                                height: 1.5,
-                              ),
-                              textAlign: TextAlign.justify,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                    
                     const SizedBox(height: 30),
                     
                     // Botão de ação "Adicionar à Estante"
@@ -297,11 +276,62 @@ class _DetalhesScreenState extends State<DetalhesScreen> {
                       ),
                     ),
 
-                    // Espaço antes do botão "Adicionar/Editar Resenha"
+                    // Mensagem "já está na sua estante" e depois a resenha (se houver)
                     if (jaAdicionado) const SizedBox(height: 12),
 
-                    // Botão "Adicionar/Editar Resenha" só aparece se o livro já está na estante
-                    if (jaAdicionado)
+                    if (jaAdicionado) ...[
+                      Text(
+                        'Este livro já foi adicionado à sua estante',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey.shade600,
+                          fontStyle: FontStyle.italic,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+
+                      const SizedBox(height: 12),
+                      
+                      // Exibir resenha (após a mensagem e antes do botão de resenha)
+                      if (widget.livro.resenha != null && widget.livro.resenha!.isNotEmpty) ...[
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFD9D9D9).withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Sua Resenha',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF333333),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                widget.livro.resenha!,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xFF666666),
+                                  height: 1.5,
+                                ),
+                                textAlign: TextAlign.justify,
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 12),
+                      ],
+                    ],
+
+                    // Botão "Adicionar/Editar Resenha" só aparece se o livro já está na estante e marcado como Lido
+                    if (jaAdicionado && estaLido)
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
@@ -323,19 +353,6 @@ class _DetalhesScreenState extends State<DetalhesScreen> {
                           child: const Text('Adicionar/Editar Resenha'),
                         ),
                       ),
-
-                    if (jaAdicionado) ...[
-                      const SizedBox(height: 12),
-                      Text(
-                        'Este livro já foi adicionado à sua estante',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey.shade600,
-                          fontStyle: FontStyle.italic,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
                   ],
                 ),
               ),
