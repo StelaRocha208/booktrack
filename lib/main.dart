@@ -1,10 +1,28 @@
 import 'package:flutter/material.dart';
+import 'screens/login_screen.dart';
 import 'screens/catalogo_screen.dart';
 import 'screens/estante_screen.dart';
 import 'models/livro.dart';
 
 void main() {
-  runApp(const BookTrackApp());
+  runApp(const MyRootApp());
+}
+
+class MyRootApp extends StatelessWidget {
+  const MyRootApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      // Inicia na tela de login
+      home: const LoginScreen(),
+      routes: {
+        // rota que abre o app principal (BookTrackApp)
+        '/app': (context) => const BookTrackApp(),
+      },
+    );
+  }
 }
 
 class BookTrackApp extends StatefulWidget {
@@ -36,6 +54,7 @@ class _BookTrackAppState extends State<BookTrackApp> {
     ];
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: telas[paginaAtual],
         bottomNavigationBar: _buildCustomBottomNav(),
@@ -49,7 +68,7 @@ class _BookTrackAppState extends State<BookTrackApp> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1), 
+            color: Colors.black.withOpacity(0.1),
             blurRadius: 8,
           ),
         ],
@@ -65,11 +84,11 @@ class _BookTrackAppState extends State<BookTrackApp> {
               width: 56,
               height: 56,
               child: Icon(
-                isActive ? _iconsFilled[i] : _iconsFilled[i],
+                isActive ? _iconsFilled[i] : _iconsOutlined[i],
                 size: 32,
                 color: isActive
                     ? const Color(0xFFBF6E3F)  // cor ativa
-                    : const Color(0xFF260F01),    // cor inativa
+                    : const Color(0xFF260F01), // cor inativa
               ),
             ),
           );
@@ -78,3 +97,4 @@ class _BookTrackAppState extends State<BookTrackApp> {
     );
   }
 }
+
