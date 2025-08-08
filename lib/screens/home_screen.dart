@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final telas = [
       CatalogoScreen(estante: estante),
-      EstanteScreen(estante: estante),
+      EstanteScreen(),
     ];
 
     return Scaffold(
@@ -33,7 +33,10 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Catálogo'),
-          BottomNavigationBarItem(icon: Icon(Icons.library_books), label: 'Estante'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.library_books),
+            label: 'Estante',
+          ),
         ],
       ),
     );

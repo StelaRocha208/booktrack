@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "932149870346",
+    "project_id": "booktrack-db",
+    "storage_bucket": "booktrack-db.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:932149870346:android:d1b04309756889bfd384f3",
+        "android_client_info": {
+          "package_name": "com.example.booktrack"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiRUG0NItiJOHQrGRGlOpd0FHAicOJn8Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
