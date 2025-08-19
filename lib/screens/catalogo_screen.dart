@@ -139,187 +139,193 @@ class _CatalogoScreenState extends State<CatalogoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF2F2F0),
-      body: Column(
-        children: [
-          // seu header...
-          Container(
-            width: double.infinity,
-            height: 100,
-            color: const Color(0xFFA65638),
-            child: const Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: EdgeInsets.only(bottom: 10),
-                child: Text(
-                  'BookTrack',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // seu header...
+            Container(
+              width: double.infinity,
+              height: 100,
+              color: const Color(0xFFA65638),
+              child: const Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: Text(
+                    'BookTrack',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
 
-          // search bar...
-          Container(
-            margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: const Color(0xFFD9D9D9),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: TextField(
-              controller: _searchController,
-              decoration: const InputDecoration(
-                hintText: 'Pesquisar livro',
-                prefixIcon: Icon(Icons.search, color: Colors.grey),
-                border: InputBorder.none,
+            // search bar...
+            Container(
+              margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: const Color(0xFFD9D9D9),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: TextField(
+                controller: _searchController,
+                decoration: const InputDecoration(
+                  hintText: 'Pesquisar livro',
+                  prefixIcon: Icon(Icons.search, color: Colors.grey),
+                  border: InputBorder.none,
+                ),
               ),
             ),
-          ),
 
-          // lista de livros
-          Expanded(
-            child:
-                _filteredLivros.isEmpty
-                    ? const Center(
-                      child: Text(
-                        'Nenhum livro encontrado',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xFF8B4513),
+            // lista de livros
+            Expanded(
+              child:
+                  _filteredLivros.isEmpty
+                      ? const Center(
+                        child: Text(
+                          'Nenhum livro encontrado',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xFF8B4513),
+                          ),
                         ),
-                      ),
-                    )
-                    : ListView.builder(
-                      padding: const EdgeInsets.all(16),
-                      itemCount: _filteredLivros.length,
-                      itemBuilder: (_, i) {
-                        final livro = _filteredLivros[i];
-                        final ja = _jaAdicionado(livro);
-                        return GestureDetector(
-                          onTap:
-                              () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder:
-                                      (_) => DetalhesScreen(
-                                        livro: livro,
-                                        estante: widget.estante,
-                                        onAdicionarLivro: (_, __) {},
-                                      ),
+                      )
+                      : ListView.builder(
+                        padding: EdgeInsets.fromLTRB(
+                          16,
+                          16,
+                          16,
+                          16 + MediaQuery.of(context).viewPadding.bottom,
+                        ),
+                        itemCount: _filteredLivros.length,
+                        itemBuilder: (_, i) {
+                          final livro = _filteredLivros[i];
+                          final ja = _jaAdicionado(livro);
+                          return GestureDetector(
+                            onTap:
+                                () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (_) => DetalhesScreen(
+                                          livro: livro,
+                                          estante: widget.estante,
+                                          onAdicionarLivro: (_, __) {},
+                                        ),
+                                  ),
                                 ),
+                            child: Container(
+                              margin: const EdgeInsets.only(bottom: 16),
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF2F2F0),
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    blurRadius: 5,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
                               ),
-                          child: Container(
-                            margin: const EdgeInsets.only(bottom: 16),
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFF2F2F0),
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  blurRadius: 5,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              children: [
-                                // thumbnail...
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Image.asset(
-                                    livro.imagemAsset,
-                                    width: 80,
-                                    height: 100,
-                                    fit: BoxFit.cover,
-                                    errorBuilder:
-                                        (_, __, ___) => Container(
-                                          width: 80,
-                                          height: 100,
-                                          color: Colors.grey.shade300,
-                                          child: const Icon(
-                                            Icons.book,
-                                            size: 40,
+                              child: Row(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Image.asset(
+                                      livro.imagemAsset,
+                                      width: 80,
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (_, __, ___) => Container(
+                                            width: 80,
+                                            height: 100,
+                                            color: Colors.grey.shade300,
+                                            child: const Icon(
+                                              Icons.book,
+                                              size: 40,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          livro.titulo,
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          livro.autor,
+                                          style: const TextStyle(
                                             color: Colors.grey,
                                           ),
                                         ),
-                                  ),
-                                ),
-                                const SizedBox(width: 16),
-                                // info + botão
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        livro.titulo,
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        livro.autor,
-                                        style: const TextStyle(
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 12),
-                                      SizedBox(
-                                        width: 250,
-                                        child: ElevatedButton.icon(
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor:
+                                        const SizedBox(height: 12),
+                                        SizedBox(
+                                          width: 250,
+                                          child: ElevatedButton.icon(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  ja
+                                                      ? const Color(0xFF4CAF50)
+                                                      : const Color(0xFFBF6E3F),
+                                              foregroundColor: Colors.white,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              padding: const EdgeInsets.all(20),
+                                            ),
+                                            onPressed:
                                                 ja
-                                                    ? const Color(0xFF4CAF50)
-                                                    : const Color(0xFFBF6E3F),
-                                            foregroundColor: Colors.white,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            padding: const EdgeInsets.all(20),
-                                          ),
-                                          onPressed:
+                                                    ? null
+                                                    : () =>
+                                                        _adicionarComCategoria(
+                                                          livro,
+                                                        ),
+                                            icon: Icon(
                                               ja
-                                                  ? null
-                                                  : () => _adicionarComCategoria(
-                                                    livro,
-                                                  ),
-                                          icon: Icon(
-                                            ja
-                                                ? Icons.check_circle
-                                                : Icons.book,
-                                            size: 20,
-                                          ),
-                                          label: Text(
-                                            ja
-                                                ? 'Adicionado à Estante'
-                                                : 'Adicionar Livro',
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600,
+                                                  ? Icons.check_circle
+                                                  : Icons.book,
+                                              size: 20,
+                                            ),
+                                            label: Text(
+                                              ja
+                                                  ? 'Adicionado à Estante'
+                                                  : 'Adicionar Livro',
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600,
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
-          ),
-        ],
+                          );
+                        },
+                      ),
+            ),
+          ],
+        ),
       ),
     );
   }

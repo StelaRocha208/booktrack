@@ -24,33 +24,41 @@ class EstanteScreen extends StatelessWidget {
         backgroundColor: const Color(0xFFF2F2F0),
         body: Column(
           children: [
-            Container(
-              width: double.infinity,
-              height: 100,
-              color: const Color(0xFFA65638),
-              child: const Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 10),
-                  child: Text(
-                    'Minha Estante',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+            // SafeArea aplicado apenas no topo para proteger o header e tabs
+            SafeArea(
+              bottom: false, // não aplicar SafeArea na parte inferior aqui
+              child: Column(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 100,
+                    color: const Color(0xFFA65638),
+                    child: const Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 10),
+                        child: Text(
+                          'Minha Estante',
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ),
-            Container(
-              color: const Color(0xFFA65638),
-              child: TabBar(
-                indicatorColor: Colors.white,
-                indicatorWeight: 3,
-                labelColor: Colors.white,
-                unselectedLabelColor: Colors.white70,
-                tabs: categorias.map((c) => Tab(text: c)).toList(),
+                  Container(
+                    color: const Color(0xFFA65638),
+                    child: TabBar(
+                      indicatorColor: Colors.white,
+                      indicatorWeight: 3,
+                      labelColor: Colors.white,
+                      unselectedLabelColor: Colors.white70,
+                      tabs: categorias.map((c) => Tab(text: c)).toList(),
+                    ),
+                  ),
+                ],
               ),
             ),
             Expanded(
@@ -67,11 +75,27 @@ class EstanteScreen extends StatelessWidget {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.book_outlined, size: 64, color: Colors.grey.shade400),
+                              Icon(
+                                Icons.book_outlined,
+                                size: 64,
+                                color: Colors.grey.shade400,
+                              ),
                               const SizedBox(height: 16),
-                              Text('Nenhum livro em "$c"', style: const TextStyle(fontSize: 16, color: Color(0xFF8B4513))),
+                              Text(
+                                'Nenhum livro em "$c"',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Color(0xFF8B4513),
+                                ),
+                              ),
                               const SizedBox(height: 8),
-                              const Text('Adicione livros do catálogo', style: TextStyle(fontSize: 14, color: Colors.grey)),
+                              const Text(
+                                'Adicione livros do catálogo',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                              ),
                             ],
                           ),
                         );
@@ -98,17 +122,39 @@ class EstanteScreen extends StatelessWidget {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.book_outlined, size: 64, color: Colors.grey.shade400),
+                              Icon(
+                                Icons.book_outlined,
+                                size: 64,
+                                color: Colors.grey.shade400,
+                              ),
                               const SizedBox(height: 16),
-                              Text('Nenhum livro em "$c"', style: const TextStyle(fontSize: 16, color: Color(0xFF8B4513))),
+                              Text(
+                                'Nenhum livro em "$c"',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Color(0xFF8B4513),
+                                ),
+                              ),
                               const SizedBox(height: 8),
-                              const Text('Adicione livros do catálogo', style: TextStyle(fontSize: 14, color: Colors.grey)),
+                              const Text(
+                                'Adicione livros do catálogo',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                              ),
                             ],
                           ),
                         );
                       }
                       return ListView.builder(
-                        padding: const EdgeInsets.all(16),
+                        // SafeArea aplicado no padding para proteger o conteúdo inferior
+                        padding: EdgeInsets.fromLTRB(
+                          16,
+                          16,
+                          16,
+                          16 + MediaQuery.of(context).padding.bottom,
+                        ),
                         itemCount: subset.length,
                         itemBuilder: (context, i) {
                           final livro = subset[i];
@@ -131,7 +177,13 @@ class EstanteScreen extends StatelessWidget {
                               decoration: BoxDecoration(
                                 color: const Color(0xFFF2F2F0),
                                 borderRadius: BorderRadius.circular(15),
-                                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 5, offset: const Offset(0, 2))],
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    blurRadius: 5,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
                               ),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,7 +199,11 @@ class EstanteScreen extends StatelessWidget {
                                         width: 96,
                                         height: 120,
                                         color: Colors.grey.shade300,
-                                        child: const Icon(Icons.book, size: 40, color: Colors.grey),
+                                        child: const Icon(
+                                          Icons.book,
+                                          size: 40,
+                                          color: Colors.grey,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -156,11 +212,32 @@ class EstanteScreen extends StatelessWidget {
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text(livro.titulo, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF333333))),
+                                        Text(
+                                          livro.titulo,
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xFF333333),
+                                          ),
+                                        ),
                                         const SizedBox(height: 4),
-                                        Text(livro.autor, style: const TextStyle(fontSize: 14, color: Colors.grey)),
+                                        Text(
+                                          livro.autor,
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
                                         const SizedBox(height: 8),
-                                        Text(livro.descricao, style: const TextStyle(fontSize: 12, color: Colors.grey), maxLines: 2, overflow: TextOverflow.ellipsis),
+                                        Text(
+                                          livro.descricao,
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.grey,
+                                          ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                         const SizedBox(height: 12),
                                         if (livro.categoria == 'Lido')
                                           SizedBox(
@@ -169,43 +246,66 @@ class EstanteScreen extends StatelessWidget {
                                               onPressed: () {
                                                 Navigator.push(
                                                   context,
-                                                  MaterialPageRoute(builder: (_) => ResenhaScreen(livro: livro)),
+                                                  MaterialPageRoute(
+                                                    builder: (_) => ResenhaScreen(
+                                                      livro: livro,
+                                                    ),
+                                                  ),
                                                 );
                                               },
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor: const Color(0xFFBF6E3F),
                                                 foregroundColor: Colors.white,
-                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(20),
+                                                ),
                                                 padding: const EdgeInsets.symmetric(vertical: 10),
                                               ),
-                                              child: const Text('Adicionar resenha', style: TextStyle(fontSize: 14)),
+                                              child: const Text(
+                                                'Adicionar resenha',
+                                                style: TextStyle(fontSize: 14),
+                                              ),
                                             ),
                                           ),
                                       ],
                                     ),
                                   ),
                                   PopupMenuButton<String>(
-                                    icon: const Icon(Icons.more_vert, color: Color(0xFF8B4513)),
+                                    icon: const Icon(
+                                      Icons.more_vert,
+                                      color: Color(0xFF8B4513),
+                                    ),
                                     itemBuilder: (_) => [
-                                      const PopupMenuItem(value: 'mover', child: Text('Mover categoria')),
-                                      const PopupMenuItem(value: 'remover', child: Text('Remover')),
+                                      const PopupMenuItem(
+                                        value: 'mover',
+                                        child: Text('Mover categoria'),
+                                      ),
+                                      const PopupMenuItem(
+                                        value: 'remover',
+                                        child: Text('Remover'),
+                                      ),
                                     ],
                                     onSelected: (v) async {
                                       final docId = livro.id.toString();
                                       if (v == 'remover') {
                                         await estanteRef.doc(docId).delete();
                                       } else if (v == 'mover') {
-                                        final next = categorias.where((x) => x != livro.categoria).toList();
+                                        final next = categorias
+                                            .where((x) => x != livro.categoria)
+                                            .toList();
                                         showDialog(
                                           context: context,
-                                          builder: (BuildContext dialogContext) => AlertDialog(
+                                          builder: (BuildContext dialogContext) =>
+                                              AlertDialog(
                                             title: const Text('Mover para'),
                                             content: Column(
                                               mainAxisSize: MainAxisSize.min,
                                               children: next.map((cat) {
                                                 return ElevatedButton(
                                                   onPressed: () async {
-                                                    await estanteRef.doc(docId).update({'categoria': cat});
+                                                    await estanteRef
+                                                        .doc(docId)
+                                                        .update({'categoria': cat});
                                                     Navigator.of(dialogContext).pop();
                                                   },
                                                   child: Text(cat),

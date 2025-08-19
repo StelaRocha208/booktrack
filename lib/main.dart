@@ -48,14 +48,14 @@ class _BookTrackAppState extends State<BookTrackApp> {
 
   @override
   Widget build(BuildContext context) {
-    final telas = [
-      CatalogoScreen(estante: estante),
-      EstanteScreen(),
-    ];
+    final telas = [CatalogoScreen(estante: estante), EstanteScreen()];
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        extendBody: false,
+        resizeToAvoidBottomInset: true,
+        // Remova o SafeArea daqui para que cada tela gerencie sua própria SafeArea
         body: telas[paginaAtual],
         bottomNavigationBar: _buildCustomBottomNav(),
       ),
@@ -70,7 +70,13 @@ class _BookTrackAppState extends State<BookTrackApp> {
           BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 8),
         ],
       ),
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      // Adicione SafeArea apenas na parte inferior para a navbar
+      padding: EdgeInsets.fromLTRB(
+        0,
+        8,
+        0,
+        8 + MediaQuery.of(context).padding.bottom,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: List.generate(_iconsOutlined.length, (i) {
